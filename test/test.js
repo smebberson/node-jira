@@ -5,14 +5,15 @@ var jira = require('../index');
 var child;
 
 var defaults = {
-	"issueIdOrKey": ""
+	"issueIdOrKey": "CRC-15",
+	"projectKey": "CRC"
 };
 
 var options = {
 	"config": {
-		"username": "",
-		"password": "",
-		"host": ""
+		"username": "scott",
+		"password": "smebberson.?",
+		"host": "thememphisagency.atlassian.net"
 	}
 };
 
@@ -35,7 +36,7 @@ describe('Using jira', function () {
 
 	});
 
-	describe('should be able to query /rest/api/latest/issue', function () {
+	describe('should be able to resolve /rest/api/latest/issue', function () {
 
 		it('.get', function (done) {
 
@@ -52,13 +53,73 @@ describe('Using jira', function () {
 
 		});
 
-		describe('specifically, issue/createmeta', function () {
+		describe('/rest/api/latest/issue/createmeta', function () {
 
 			it('.get', function (done) {
 
 				jira.issue.createmeta.get(requestOptions, function (response) {
 					response.should.have.property('projects');
 					done();
+				});
+
+			});
+
+		});
+
+	});
+
+	describe('should be able to resolve /rest/api/latest/project', function () {
+
+		it('.get', function (done) {
+
+			jira.project.get(requestOptions, function (response) {
+				response.should.be.an.instanceOf(Array);
+				done();
+			});
+
+		});
+
+		describe('/rest/api/latest/project/{key}', function () {
+
+			it('.get', function (done) {
+
+				requestOptions.key = defaults.projectKey;
+
+				jira.project.get(requestOptions, function (response) {
+					response.key.should.equal(requestOptions.key);
+					done();
+				});
+
+			});
+
+			describe('/rest/api/latest/project/{key}/components', function () {
+
+				it('.get', function (done) {
+
+					requestOptions.key = defaults.projectKey;
+
+					jira.project.components.get(requestOptions, function (response) {
+						response.should.be.an.instanceOf(Array);
+						done();
+					});
+
+				});
+
+			});
+
+
+
+			describe('/rest/api/latest/project/{key}/versions', function () {
+
+				it('.get', function (done) {
+
+					requestOptions.key = defaults.projectKey;
+
+					jira.project.versions.get(requestOptions, function (response) {
+						response.should.be.an.instanceOf(Array);
+						done();
+					});
+
 				});
 
 			});
