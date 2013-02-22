@@ -7,5 +7,9 @@
         "JIRA"
     ],
     "license": "Apache License, Version 2.0",
-    "main": "./lib/index.js"
+    "main": "./lib/index.js",
+    "devDependencies": {
+    	"mocha": "1.8.x",
+        "should": "1.2.x"
+    }
 }
